@@ -1,6 +1,7 @@
 # pubhealth
 
-## Set up singularity environment for running in NYU HPC
+## Usage
+### Set up singularity environment for running in NYU HPC
 This task is done on the NYU greene cluster, and the following steps describe the environment set up:
 1. Clone this repo to greene scratch.
 
@@ -8,15 +9,14 @@ This task is done on the NYU greene cluster, and the following steps describe th
 
 3. In the main directory of pubhealth, run `bash ./scripts/create_base_overlay.sh` and `bash ./scripts/create_package_overlay.sh` to create container overlay.
 
-## File explanation
+### File explanation
 1. `src/utils.py` predefines some useful functions, such as preprocessing on the dataset, tokenization and embedding, etc.
 
 2. `src/train.py` fine tunes the pretrained language model, and use `raytune` for model selection and hyperparameter tuning. Finally, the model fine-tuned with the best configuration will be saved and uploaded to huggingface for convenience. Run `sbatch src/train.sbatch` is to submit a SLURM job that cast the `train.py` inside the singularity container.
 
 3. `predict.py` loads the fine-tuned model and predict the veracity of claims in the test dataset. Run `sbatch src/prediction.sbatch` will output the predicted veracity and evaluate the model with accuracy and F1 score as well as runtime.
 
-## Explanation
-
+## Workflow
 ### Task defination
 The task is to verify the veracity of claims on the PUBHEALTH dataset. Noticing that `explanation` is the variable that gives the information of the veracity, the task can be seen as extracting feature and sentiment information from the text variable `explanation` and then predict on the veracity of claims. The veracity of claims has 4 classes (true, false, unproven, mixture), so this can be further considered as a sequence classification task, with 'explanation' as the text input, and veracity as target label.
 
