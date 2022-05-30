@@ -47,9 +47,9 @@ The tuning results show that RoBERTa performs much better than BERT with an roug
     - warmup steps: 500
 
 - `roberta-pubhealth`, the RoBERTa model fine tuned on the PUBHEALTH dataset with above best config achieves the following results on the test dataset:\
-    - micro f1(accuracy): 0.7145
-    - macro f1: 0.6069
-    - weighted f1: 0.7116
+    - micro f1(accuracy): 0.7137
+    - macro f1: 0.6056
+    - weighted f1: 0.7106
     - samples predicted per second: 9.31 
 
 `results/output.txt`, the slurm output file of running the `predict.py`, contains the test results. The fine tuned model `roberta-pubhealth` has been uploaded to `Huggingface` as well  
