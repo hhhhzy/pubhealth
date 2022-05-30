@@ -52,4 +52,4 @@ The tuning results show that RoBERTa performs much better than BERT with an roug
     - weighted f1: 0.7106
     - samples predicted per second: 9.31 
 
-`results/output.txt`, the slurm output file of running the `predict.py`, contains the test results. The fine tuned model `roberta-pubhealth` has been uploaded to `Huggingface` as well  
+`results/output.txt`, the slurm output file of running the `predict.py`, contains the test results. The fine tuned model `roberta-pubhealth` has been uploaded to `Huggingface` [https://huggingface.co/hhhhzy/roberta-pubhealth] as well.
