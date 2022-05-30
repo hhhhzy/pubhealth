@@ -33,8 +33,9 @@ trainer = Trainer(model=model)
 # measure for model efficiency
 start_time = time.time()
 output = trainer.predict(test_dataset)
+runtime = time.time-start_time
 print('-'*20 + ' Measure for Model Efficiency ' + '-'*20, flush=True)
-print(f'time to predict {len(output)} sample: ')
+print(f'Number of samples predicted per second: {len(output)/runtime}')
 
 # measure for model performance
 predictions = output[0].argmax(axis=1)
