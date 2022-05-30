@@ -30,24 +30,26 @@ I take advantage of the pretrained language models (PLMs), and use the mature pr
     - Import the PLMs from huggingface and fine tune on the training split of the dataset.
     - Apply hybrid search for hyperparamter tuning, specifically, grid search on the model type, and random search on the model config including number of epochs, batch size, learning rate and warmup steps. The tuning is done with `ray tune` because it is efficient and the tuning process can be monitored through the dashboard.
     - Retrain the model with the best tuned config, and save the fine-tuned model and upload it to Hugginface with the model name 'roberta-pubhealth' or 'bert-pubhealth.
+    - The notebook `finetune_example.ipynb` gives an example of the workflow of finetuning.
 3. Prediction and evaluation
     - Load the fine tuned model `roberta-pubhealth` and use it to predict the veracity on the test dataset
     - Evaluate the model performance  with `accuracy` and `F1 score` as this is a classification task
-    - Evaluate the model efficiency with the predicting runtime
+    - Evaluate the model efficiency with the number of sample predicted per second
 
 ### Test Results
+The tuning results show that RoBERTa performs much better than BERT with an roughly 10% overall performance gain.
+
 - The tuned best config is as following:
     - model: roberta base
     - batch size: 32
     - learning rate: 5e-5
-    - number of epochs: 3
+    - number of epochs: 4
     - warmup steps: 500
 
-- `roberta-pubhealth`, the RoBERTa model fine tuned on the PUBHEALTH dataset with above best config achieves the following results on the test dataset:
-    - accuracy: 
-    - micro f1:
-    - macro f1:
-    - weighted f1:
+- `roberta-pubhealth`, the RoBERTa model fine tuned on the PUBHEALTH dataset with above best config achieves the following results on the test dataset:\
+    - micro f1(accuracy): 0.7145
+    - macro f1: 0.6069
+    - weighted f1: 0.7116
     - model efficiency: 
 
-`results/output.txt`, the slurm output file of running the `predict.py`, contains the test results.
+`results/output.txt`, the slurm output file of running the `predict.py`, contains the test results. The fine tuned model `roberta-pubhealth` has been uploaded to `Huggingface` as well  

@@ -22,17 +22,14 @@ def embedding(data, config):
     elif config['model_name'] == 'roberta':
         tokenizer = AutoTokenizer.from_pretrained('roberta-base')
 
-    # truncate at length=128 for a balance of time consuming and information coverage
-    data_tokenized = data.map(lambda batch: tokenizer(batch['explanation'], padding='max_length', truncation=True, max_length=128))
+    # truncate at length=256 for a balance of time consuming and information coverage 
+    data_tokenized = data.map(lambda batch: tokenizer(batch['explanation'], padding='max_length', truncation=True, max_length=256))
 
     return data_tokenized
 
 
 def compute_metrics(predictions, truth, metric_name):
-    if metric_name == 'accuracy':
-        metric = load_metric('accuracy')
-        score = metric.compute(predictions=predictions, references=truth)
-    elif metric_name == 'weighted f1':
+    if metric_name == 'weighted f1':
         metric = load_metric('f1')
         score = metric.compute(predictions=predictions, references=truth, average='weighted')
     elif metric_name == 'micro f1':
@@ -53,16 +50,8 @@ def compute_accuracy(eval_pred):
     return accuracy
 
 
-def compute_f1(eval_pred):
-    logits, labels = eval_pred
-    predictions = np.argmax(logits, axis=-1)
-    metric = load_metric("f1")
-    accuracy = metric.compute(predictions=predictions, references=labels, average='weighted')
-    return accuracy
-
-
-# save the best finetuned model to huggingface
+# save the best finetuned model
 def save_model(model, config):
     name = config['model_name']+ '-pubhealth'
-    model.save_pretrained(name)
+    model.save_pretrained('../name')
     print('The best fine-tuned model has been saved as: ', name, flush=True)
