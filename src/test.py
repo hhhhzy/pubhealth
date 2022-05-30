@@ -26,9 +26,10 @@ def test(best_config):
     start_time = time.time()
     output = trainer.predict(test_dataset)
     runtime = time.time()-start_time
+    pred_second = len(output)*best_config['batch_size']/runtime
     print(' ')
     print('-'*20 + ' Measure for Model Efficiency ' + '-'*20, flush=True)
-    print(f'Number of samples predicted per second: {len(output)*best_config['batch_size']/runtime}')
+    print(f'Number of samples predicted per second: {pred_second}')
 
     # measure for model performance
     predictions = output[0].argmax(axis=1)
