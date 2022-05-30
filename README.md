@@ -25,7 +25,7 @@ I take advantage of the pretrained language models (PLMs), and use the mature pr
 1. Data preprocessing and text embedding
     - Filter the useful columns
     - Remove the row with label '-1' since the dataset is supposed to have labels `0, 1, 2, 3` that denote `true, false, unproven, mixture`
-    - Use the pretrained tokenizer to extract the feature in `explanation`, and the tokenizer is set to truncate at max length 128 for a balance of time consuming and information coverage.
+    - Use the pretrained tokenizer to extract the feature in `explanation`, and since the sequence is long, the tokenizer is set to truncate at max length 256 for a balance of time consuming and information coverage.
 2. Fine tune the PLMs and search for optimal hyperparameters
     - Import the PLMs from huggingface and fine tune on the training split of the dataset.
     - Apply hybrid search for hyperparamter tuning, specifically, grid search on the model type, and random search on the model config including number of epochs, batch size, learning rate and warmup steps. The tuning is done with `ray tune` because it is efficient and the tuning process can be monitored through the dashboard.
