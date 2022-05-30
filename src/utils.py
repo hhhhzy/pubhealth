@@ -7,9 +7,11 @@ from datasets import load_dataset, ClassLabel, Value, load_metric
 
 
 def data_preprocess(data):
-    # only keep the useful columns
-    data = data.remove_columns(['claim_id', 'date_published', 'fact_checkers', 'main_text', 'sources', 'subjects'])
-
+    # only keep the useful columns 'explanation' and 'label'
+    data = data.remove_columns(['claim', 'claim_id', 'date_published', 'fact_checkers', 'main_text', 'sources', 'subjects'])
+    
+    # remove the invalid data whose label is '-1'(should be 0,1,2,3)
+    data = data.filter(lambda x: x['label'] != -1)
     return data
 
 
@@ -26,15 +28,19 @@ def embedding(data, config):
     return data_tokenized
 
 
-def compute_metrics(eval_pred, metric_name):
-    logits, labels = eval_pred
-    predictions = np.argmax(logits, axis=-1)
+def compute_metrics(predictions, truth, metric_name):
     if metric_name == 'accuracy':
         metric = load_metric('accuracy')
-        score = metric.compute(predictions=predictions, references=labels)
-    elif metric_name == 'f1':
+        score = metric.compute(predictions=predictions, references=truth)
+    elif metric_name == 'weighted f1':
         metric = load_metric('f1')
-        score = metric.compute(predictions=predictions, references=labels, average='weighted')
+        score = metric.compute(predictions=predictions, references=truth, average='weighted')
+    elif metric_name == 'micro f1':
+        metric = load_metric('f1')
+        score = metric.compute(predictions=predictions, references=truth, average='micro')
+    elif metric_name == 'macro f1':
+        metric = load_metric('f1')
+        score = metric.compute(predictions=predictions, references=truth, average='macro')
 
     return score
 
@@ -46,9 +52,17 @@ def compute_accuracy(eval_pred):
     accuracy = metric.compute(predictions=predictions, references=labels)
     return accuracy
 
+
 def compute_f1(eval_pred):
     logits, labels = eval_pred
     predictions = np.argmax(logits, axis=-1)
     metric = load_metric("f1")
     accuracy = metric.compute(predictions=predictions, references=labels, average='weighted')
     return accuracy
+
+
+# save the best finetuned model to huggingface
+def save_model(model, config):
+    name = config['model_name']+ '-pubhealth'
+    model.save_pretrained(name)
+    print('The best fine-tuned model has been saved as: ', name, flush=True)
