@@ -22,7 +22,7 @@ Test = load_dataset('health_fact', split='test')
 
 # data preprocess and embedding
 test =  data_preprocess(Test)
-test_dataset = embedding(test, config)
+test_dataset = embedding(test, best_config)
 
 # load the fine-tuned model
 model = AutoModelForSequenceClassification.from_pretrained("roberta-pubhealth", num_labels=4)
